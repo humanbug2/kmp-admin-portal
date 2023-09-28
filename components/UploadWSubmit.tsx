@@ -121,11 +121,14 @@ const UploadWSubmit = () => {
 
   const fetchUserData = async () => {
     try {
-      const userList = await fetch("api/userData", {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
+      const userList = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/userData`,
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
       const userData = await userList.json();
       // Returns Task list in the form of object
       return userData;
@@ -141,13 +144,16 @@ const UploadWSubmit = () => {
         file: selectedFile.name,
         users: selectedUsers,
       };
-      const res = await fetch("api/taskData", {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/taskData`,
+        {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log(res, "response");
       setTaskSpinner(false);
       res.status === 200 ? handleOpenSuccess() : handleOpenError();
