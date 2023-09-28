@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tasks {
+  Id         Int      @id @default(autoincrement())
+  Task_Name  String
+  Status     String?
+  Start_Date String?
+  End_Date   String?
+  Sheet_Url  String?
+  Table_Name String
+  Comments   String?
+  Members    String[]
+}
+
+model User {
+  id            String     @id
+  name          String?
+  email         String?    @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime
+  accounts      accounts[]
+  sessions      sessions[]
+}
+
+model accounts {
+  id                  String  @id
+  user_id             String
+  type                String
+  provider            String
+  provider_account_id String
+  refresh_token       String?
+  access_token        String?
+  expires_at          Int?
+  token_type          String?
+  scope               String?
+  id_token            String?
+  session_state       String?
+  oauth_token_secret  String?
+  oauth_token         String?
+  User                User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([provider, provider_account_id])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gastro_npi {
+  id                    BigInt?
+  allocation            String?
+  npi                   BigInt?
+  last_name             String?
+  first_name            String?
+  full_name             String?
+  middle_name           String?
+  twitter               String?
+  doximity_link         String?
+  linkedin_profile_link String?
+  reviewed              String?
+  specialities          String?
+  reviewed_date         String?
+  batch_id              BigInt?
+
+  @@ignore
+}
+
+model gastro_npi_twitter_doximity_linkedin {
+  id                    Int     @id @unique
+  allocation            String?
+  npi                   Int?
+  last_name             String?
+  first_name            String?
+  full_name             String?
+  middle_name           String?
+  twitter               String?
+  doximity_link         String?
+  linkedin_profile_link String?
+  reviewed              String?
+  specialities          String?
+  reviewed_date         String?
+  batch_id              Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model newtesting {
+  id         BigInt?
+  allocation String?
+  name       String?
+  batch_id   BigInt?
+
+  @@ignore
+}
+
+model newtesting234 {
+  id         Int     @id @unique
+  allocation String?
+  name       String?
+}
+
+model sessions {
+  id            String   @id
+  session_token String   @unique
+  user_id       String
+  expires       DateTime
+  User          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
