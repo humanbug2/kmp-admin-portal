@@ -24,14 +24,18 @@ const UploadWSubmit = () => {
   });
   const [selectedFile, setSelectedFile] = useState({ name: "" });
   const [selectedUsers, setSelectedUsers] = useState([] as string[]);
-  const [open, setOpen] = useState(false);
+  const [openS3Message, setOpenS3Message] = useState(false);
   const [openError, setOpenError] = useState(false);
+  const [open, setOpen] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
   const [submitSpinner, setSubmitSpinner] = useState(false);
   const [taskSpinner, setTaskSpinner] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
+  };
+  const handleOpenS3Message = () => {
+    setOpenS3Message(true);
   };
   const handleOpenError = () => {
     setOpenError(true);
@@ -41,7 +45,7 @@ const UploadWSubmit = () => {
   };
 
   const handleClose = (
-    event: React.SyntheticEvent | Event,
+    event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -50,8 +54,18 @@ const UploadWSubmit = () => {
 
     setOpen(false);
   };
+  const handleCloseS3Message = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenS3Message(false);
+  };
   const handleCloseError = (
-    event: React.SyntheticEvent | Event,
+    event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -61,7 +75,7 @@ const UploadWSubmit = () => {
     setOpenError(false);
   };
   const handleCloseSuccess = (
-    event: React.SyntheticEvent | Event,
+    event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -87,6 +101,7 @@ const UploadWSubmit = () => {
     };
     try {
       const response = await s3.upload(params).promise();
+      handleOpenS3Message();
       await handleSubmit();
     } catch (error) {
       setSubmitSpinner(false);
@@ -246,6 +261,12 @@ const UploadWSubmit = () => {
         autoHideDuration={6000}
         onClose={handleClose}
         message="File Successfully Uploaded in DB"
+      />
+      <Snackbar
+        open={openS3Message}
+        autoHideDuration={10000}
+        onClose={handleCloseS3Message}
+        message="File added successfully in S3 Bucket. Please wait as we upload all your data in our database."
       />
       <Snackbar
         open={openError}
