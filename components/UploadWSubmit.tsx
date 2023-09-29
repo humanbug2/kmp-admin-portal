@@ -194,7 +194,7 @@ const UploadWSubmit = () => {
 
   return (
     <div className="max-w-md mx-auto p-4">
-      <label className="block text-lg font-bold mb-2">Select a CSV File:</label>
+      <label className="block text-xl font-bold mb-2">Select a CSV File:</label>
       <div className="rounded-md shadow-sm cursor-pointer">
         <input
           id="fileInput"
@@ -203,6 +203,20 @@ const UploadWSubmit = () => {
           onChange={handleFileChange}
           className="block cursor-pointer w-full py-2 px-3 border border-white rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 focus:outline-none"
         />
+      </div>
+      <div className="my-2 text-lg text-red-900 rounded-lg border-2 border-red-600 p-4">
+        <span>
+          Please ensure your file abides by the following rules before
+          submitting:
+        </span>
+        <li>File format should be .csv</li>
+        <li>
+          File Name and Column Names should be in alphanumeric format, or can
+          have a _, no other special characters supported.
+        </li>
+        <li>
+          File should have 2 columns: &apos;id&apos; and &apos;allocation&apos;
+        </li>
       </div>
       {submitSpinner ? (
         <LoadingSpinner size={30} />
@@ -264,7 +278,7 @@ const UploadWSubmit = () => {
       />
       <Snackbar
         open={openS3Message}
-        autoHideDuration={10000}
+        autoHideDuration={6000}
         onClose={handleCloseS3Message}
         message="File added successfully in S3 Bucket. Please wait as we upload all your data in our database."
       />
