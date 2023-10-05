@@ -229,7 +229,7 @@ const UploadWSubmit = () => {
         </button>
       )}
 
-      {userLoading || userData === "undefined" ? (
+      {userLoading || userData === "null" || typeof userData === "undefined" ? (
         <CircularProgress />
       ) : (
         <>
