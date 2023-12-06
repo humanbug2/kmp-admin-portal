@@ -16,10 +16,10 @@ import LoadingSpinner from "./LoadingSpinner";
 
 const UploadWSubmit = () => {
   const s3 = new S3({
-    region: "us-east-1",
+    region: process.env.NEXT_PUBLIC_AWS_S3_REGION || "",
     credentials: {
-      accessKeyId: "AKIAXFG5KVPTVPQMMHG7",
-      secretAccessKey: "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",
+      accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID || "",
+      secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY || "",
     },
   });
   const [selectedFile, setSelectedFile] = useState({ name: "" });
@@ -84,7 +84,7 @@ const UploadWSubmit = () => {
 
     setOpenSuccess(false);
   };
-  const apiGatewayUrl = "https://kmp-render.onrender.com/";
+  const apiGatewayUrl = process.env.NEXT_PUBLIC_RENDER_URL || "";
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     let file: File | undefined;
@@ -95,7 +95,7 @@ const UploadWSubmit = () => {
   const handleUpload = async () => {
     setSubmitSpinner(true);
     const params = {
-      Bucket: "kmp-files",
+      Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET || "",
       Key: selectedFile?.name,
       Body: selectedFile,
     };
